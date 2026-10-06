@@ -1,0 +1,32 @@
+---
+title: "Does Owning the Market Mean Owning the Audience?"
+dek: "European media law treats revenue share as a stand-in for audience influence. Across 19 of the continent's largest broadcasters and distributors, a Bayesian regression finds that stand-in holds up only once you remove one cable conglomerate."
+kicker: "economics"
+date: "September 27, 2026"
+author: "the μ desk"
+n: 19
+readTime: "6 min"
+hasVideo: false
+---
+
+European media pluralism law doesn't actually measure who people pay attention to. It measures who owns what, and assumes the two move together closely enough to stand in for each other. The EU's Media Pluralism Monitor flags a country's TV, radio, or newspaper market as high risk the moment the top four owners control more than half of it, and that 50% line is drawn using revenue and subscriber counts, not ratings. The assumption underneath the whole exercise is that a firm's share of the money is a decent proxy for its share of the eyeballs. I wanted to know whether that assumption survives contact with actual audience data.
+
+The European Audiovisual Observatory tracks both numbers for the continent's largest television and streaming groups: each firm's share of the industry's operating revenue, and, separately, its share of total linear TV viewing hours. Revenue share is the ownership-concentration side of the ledger, the thing merger reviews and pluralism monitors actually use. Audience share is the thing they're trying to approximate. I pulled both for 19 firms, broadcasters, pay-TV operators, and telecoms that compete for the same viewers, using the Observatory's 2021 dataset. I left out Netflix and Amazon for now; their revenue share is substantial but they don't register a linear TV audience at all, for reasons that turn out to matter later.
+
+Across those 19 firms, revenue share barely predicts audience share. The raw correlation is 0.13, indistinguishable from noise at this sample size. Rather than lean on a single p-value, I put a weakly informative prior on the relationship and asked what the data does to it: the posterior slope comes out to 0.07 audience-share points per point of revenue share, with a 95% credible interval running from -0.17 to 0.31, and a 72% chance the true slope is even positive. That's barely a lean, let alone a finding.
+
+![Revenue share vs TV audience share for 19 European AV groups, with regression lines for the full sample and excluding Comcast](/charts/ep15/1_revenue_vs_audience_share.png)
+
+One company is doing most of the work in keeping that slope flat. Comcast holds 13.1% of the industry's revenue, more than double the next-largest firm, but only 1.7% of the audience, because most of that revenue comes from selling cable and broadband connections, not from programming anyone chooses to watch. Pull Comcast out of the sample and the posterior slope jumps to 0.46, with a credible interval that clears zero entirely and a 98% chance the relationship is positive. One company's business model, distribution infrastructure priced and scaled nothing like a broadcaster, decides whether the headline finding is "no relationship" or "clear relationship."
+
+![Posterior distributions of the regression slope across three specifications: full sample, excluding Comcast, and excluding public broadcasters](/charts/ep15/2_posterior_slope_by_specification.png)
+
+The second confound cuts the other way. Public broadcasters, the BBC, ARD, RAI, France Télévisions, ZDF, get their revenue mostly from license fees, a form of scale that has nothing to do with buying up competitors and everything to do with a legal mandate that predates the commercial AV market entirely. Drop them from the sample and the slope collapses back to flat, a 68% chance of a positive relationship, statistically the same as a coin flip. The pattern that looked strongest, ownership predicting audience, depends on keeping in exactly the firms whose "ownership" isn't really a market outcome at all.
+
+Neither confound points the same direction, and that's the honest part of the result. Some public broadcasters convert license-fee revenue into audience far more efficiently than their revenue share implies, RAI and France Télévisions both draw noticeably more audience share than revenue share. Others, the BBC and ARD among them, actually run a small deficit the other way. Small national players with concentrated programming, MediaForEurope in Italy, PPF and Cyfrowy Polsat in Central Europe, over-perform their revenue weight the most of anyone in the sample. Distribution-heavy firms, Comcast, Canal Plus, Liberty Global, consistently under-perform theirs.
+
+![Audience share minus revenue share for each firm, ranked from largest under-performance to largest over-performance](/charts/ep15/3_audience_minus_revenue_gap.png)
+
+Then there's the pair I left out of the regression. Netflix's revenue share, 5.7%, would put it among the five largest players in this entire dataset, roughly level with RTL Group. Its linear TV audience share is zero, not because anyone ignored it, but because "linear TV audience" is a category that no longer describes where a meaningful share of its actual viewing happens. The Observatory isn't wrong to report it that way; the metric is just measuring a narrower slice of attention than it used to, and the slice it's missing is growing.
+
+So the claim doesn't hold up cleanly, and the way it fails is the more interesting result. Ownership concentration and audience concentration aren't the same quantity wearing two names, they diverge in specific, explicable directions, toward firms selling pipes instead of programming on one side and firms with a legal funding mandate on the other. A regulatory shortcut built on the assumption that revenue share is close enough to audience share is measuring the wrong thing for exactly the kinds of companies, cable conglomerates and streaming platforms, that increasingly define the market it's trying to police.

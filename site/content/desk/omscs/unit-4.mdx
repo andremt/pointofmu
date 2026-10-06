@@ -1,0 +1,37 @@
+This is the unit where Bayesian inference stops being abstract and starts producing actual numbers you can compute by hand, which is also why it's spread across two homeworks (HW2 covers roughly the first half, HW3 the rest).
+
+## The four ingredients, every time
+
+Every Bayesian inference problem has the same skeleton:
+
+- **Prior**, π(θ), your belief about the parameter before seeing data.
+- **Likelihood**, f(x|θ), how likely the observed data is, as a function of θ.
+- **Posterior**, π(θ|x) ∝ π(θ) · f(x|θ), belief after seeing data, proportional to prior times likelihood.
+- **Evidence**, f(x), the normalizing constant that makes the posterior integrate to 1. You often don't need to compute it explicitly if you only care about the *shape* of the posterior.
+
+That proportionality sign is doing a lot of work: most of Bayesian computation is figuring out what distribution "prior × likelihood" is proportional to, without ever computing the messy normalizing integral.
+
+## Conjugate families: why some priors are special
+
+A prior is **conjugate** to a likelihood if the resulting posterior is the same *family* of distribution as the prior, just with updated parameters. The three you'll use constantly:
+
+- **Beta-Binomial**: Beta(α, β) prior on a probability, binomial data → posterior is Beta(α + successes, β + failures). The update is just addition.
+- **Gamma-Poisson**: Gamma(α, β) prior on a rate, Poisson data → posterior is Gamma(α + Σx, β + n).
+- **Normal-Normal**: Normal prior on a mean, normal data with known variance → posterior is Normal, with the posterior mean a precision-weighted average of the prior mean and the sample mean.
+
+Conjugacy isn't just a computational convenience, it also builds intuition, because in every case the posterior parameters are literally "prior parameters plus a summary of the data." Once you've derived the Beta-Binomial update by hand once, you can see the same additive pattern everywhere else.
+
+## From a posterior to an answer
+
+A posterior distribution isn't itself the deliverable, you still have to extract something usable from it:
+
+- **Point estimation**: posterior mean, median, or mode, depending on what loss function you're implicitly minimizing.
+- **Credible intervals**: the Bayesian analogue of a confidence interval, but with the "95% probability the parameter is in here" interpretation Unit 2 established. The two common constructions are equal-tailed intervals and the highest posterior density (HPD) interval, which is narrower when the posterior is skewed.
+- **Hypothesis testing**: computing the posterior probability of a hypothesis directly, rather than a p-value against a null.
+- **Prediction**: the posterior predictive distribution folds in your remaining parameter uncertainty when predicting a new observation, which is why Bayesian predictive intervals tend to be a bit wider than a naive plug-in estimate would give you.
+
+## Choosing priors honestly
+
+Prior choice runs from fully informative (elicited from a domain expert or earlier data) to deliberately non-informative (flat or nearly flat, letting the data dominate). A useful way to think about a prior's strength is its **effective sample size**, a Beta(2,2) prior behaves like having already seen 4 observations before your real data arrives, while a Beta(20,20) behaves like 40. That framing makes it much easier to judge whether a proposed prior is reasonable for the problem at hand, or accidentally overwhelming a small dataset.
+
+**Empirical Bayes** is the practice of estimating the prior's own parameters from the data itself, rather than fixing them in advance. It's a pragmatic middle ground, not fully Bayesian in the purist sense (the prior is supposed to come from outside the data), but often a reasonable way to get a sensible, data-informed prior when no strong external information exists.

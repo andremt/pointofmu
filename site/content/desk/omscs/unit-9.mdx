@@ -1,0 +1,17 @@
+Every model so far has assumed you already know what model to fit. This unit is about the step before and after that: checking whether a fitted model is any good, and choosing between competing models when more than one is plausible.
+
+## Posterior predictive checks
+
+The most direct way to check a model: simulate new data from the fitted posterior, and see whether the simulated data looks like the real data. If your model claims the data is Poisson but every posterior-predictive simulation produces far less variance than what you actually observed, that's a concrete, visual signal of overdispersion the model isn't capturing, not just an abstract diagnostic statistic, but data you can plot next to data.
+
+## Model comparison: DIC and CPO
+
+**Deviance Information Criterion (DIC)** is a Bayesian analogue of AIC, it balances how well a model fits (via the deviance, a transform of the likelihood) against model complexity (an "effective number of parameters" term that accounts for how much the hierarchical/prior structure constrains the parameters). Lower DIC indicates a better tradeoff of fit versus complexity, same direction as AIC. The complexity penalty here is genuinely different from AIC's simple parameter count, because in a hierarchical model the *effective* number of free parameters is smaller than the raw count, partial pooling from Unit 7 reduces effective complexity, and DIC is built to capture that.
+
+**Conditional Predictive Ordinate (CPO)** is a leave-one-out diagnostic: for each observation, it's the posterior predictive density of that observation computed as if the model had been fit without it. Low CPO values flag individual observations the model struggles to predict, useful for finding outliers or points where the model is systematically wrong, in a way an aggregate fit statistic like DIC can't localize.
+
+## Variable selection
+
+Bayesian variable selection generally works by putting a prior on model structure itself, either a spike-and-slab prior that lets a coefficient's prior mass concentrate near exactly zero (effectively "off") or spread out (effectively "on"), or by comparing DIC/predictive performance across a set of candidate models directly. The core idea carries over from frequentist variable selection (find the smallest model that predicts well) but the mechanism is different: instead of stepwise addition/removal based on significance tests, you're either integrating over model uncertainty directly or comparing a small number of full-model fits by a formal criterion.
+
+Model selection is where this unit connects hardest to the final and the project, both draw on units 1-10, and choosing (and justifying) a specific model structure, then checking it actually fits, is most of what a real applied Bayesian analysis is.

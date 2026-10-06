@@ -1,0 +1,23 @@
+## What "Bayesian" means before any math shows up
+
+Every statistics course eventually asks the same question: given some data, what do you believe about the world? The frequentist answer and the Bayesian answer disagree about what "probability" is even allowed to describe.
+
+A frequentist treats probability as a long-run frequency, the fraction of times something happens if you repeated the experiment forever. Under that view, a fixed but unknown parameter (say, the true defect rate of a manufacturing line) doesn't have a probability distribution, because it isn't random, it's just unknown. All the randomness lives in the *data* you'd collect if you resampled.
+
+A Bayesian treats probability as a degree of belief, which can attach to anything you're uncertain about, including a fixed parameter. That one move is the whole philosophy: instead of asking "how would this procedure behave over infinite repetitions," you ask "given exactly the data I have, what's my updated belief about the parameter." The parameter gets a probability distribution because *you* are uncertain about it, not because it's actually random.
+
+This course builds everything on top of that reframing. The prior is your belief before seeing data; the likelihood is how the data would look under different parameter values; the posterior is your updated belief after combining the two. Nothing here requires new math you haven't seen, conditional probability and Bayes' theorem are undergraduate material, but it requires getting comfortable putting a distribution on something that classical stats trained you to think of as fixed.
+
+***
+
+## What the course actually asks of you
+
+Per the syllabus, the course goals are concrete and testable: given a real dataset, pick an appropriate model; formalize prior knowledge as a distribution; update coherently as more data arrives; and use PyMC once the tooling is introduced (not before Homework 5). The math under MCMC won't be derived in full rigor, the emphasis is on using the method correctly, not proving convergence.
+
+Two practical notes worth internalizing now, because they'll save time all semester:
+- Python is the tool through Homework 4. PyMC only enters starting Homework 5.
+- Every random-seed exercise should use `6420` for reproducibility, and answers get rounded to four decimal places, small formatting habits the graders actually check.
+
+## The first regression, done the plain way
+
+The point of doing a simple regression in Unit 1 isn't to learn regression, you already know it. It's to have a working baseline in the exact same tooling (Python, Jupyter) the rest of the course uses, before any Bayesian machinery gets added on top. When Unit 4 introduces a Bayesian version of the same kind of model, the contrast will be sharper if the frequentist version is already fresh and running cleanly on your machine.

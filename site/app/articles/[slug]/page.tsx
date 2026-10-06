@@ -1,38 +1,44 @@
-import { notFound } from "next/navigation"
-import { MDXRemote } from "next-mdx-remote/rsc"
-import { getAllArticles, getArticleBySlug } from "@/lib/articles"
-import StickyVideoRail from "@/components/StickyVideoRail"
+import { notFound } from 'next/navigation'
+import { MDXRemote } from 'next-mdx-remote/rsc'
+import TopNav from '@/components/nav/TopNav'
+import Footer from '@/components/ui/Footer'
+import ArticleClient from './ArticleClient'
+import ReceiptsPanel from '@/components/article/ReceiptsPanel'
+import Cite from '@/components/article/Cite'
+import BigStat from '@/components/ui/BigStat'
+import Pink from '@/components/article/Pink'
+import InteractiveChart from '@/components/chart/InteractiveChart'
+import InteractiveBarChart from '@/components/chart/InteractiveBarChart'
+import { getArticle, getArticleSlugs } from '@/lib/mdx'
 
-export function generateStaticParams() {
-  return getAllArticles().map((a) => ({ slug: a.slug }))
+export async function generateStaticParams() {
+  return getArticleSlugs().map(slug => ({ slug }))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const article = getArticleBySlug(slug)
+  const article = getArticle(slug)
   if (!article) return {}
-  return { title: `${article.title} · pointofμ`, description: article.dek }
+  return { title: article.meta.title, description: article.meta.dek }
 }
+
+const mdxComponents = { Cite, ReceiptsPanel, BigStat, Pink, InteractiveChart, InteractiveBarChart }
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const article = getArticleBySlug(slug)
+  const article = getArticle(slug)
   if (!article) notFound()
 
+  const { meta, content } = article
+  const rendered = <MDXRemote source={content} components={mdxComponents} />
+
   return (
-    <div className="max-w-5xl mx-auto px-6 sm:px-9 py-12 grid grid-cols-1 md:grid-cols-[1fr_260px] gap-8 md:gap-12">
-      <article className="min-w-0">
-        <div className="kicker mb-4">
-          μ · {article.kicker} · {article.date} · {article.readTime}
-        </div>
-        <h1 className="font-serif italic text-3xl sm:text-4xl leading-tight mb-6">{article.title}</h1>
-        <div className="prose prose-ink max-w-none">
-          <MDXRemote source={article.content} />
-        </div>
-      </article>
-      <aside className="md:sticky md:top-12 h-fit">
-        <StickyVideoRail articleSlug={article.slug} hasVideo={article.hasVideo} tiktokUrl={article.tiktokUrl} />
-      </aside>
+    <div style={{ minHeight: '100vh', background: 'var(--pom-paper)' }}>
+      <TopNav />
+      <ArticleClient meta={meta}>
+        {rendered}
+      </ArticleClient>
+      <Footer />
     </div>
   )
 }

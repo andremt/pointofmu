@@ -1,0 +1,17 @@
+## Missing data, handled as an inference problem rather than a cleanup step
+
+The frequentist default for missing data is usually some form of deletion or imputation *before* modeling, drop incomplete rows, or fill gaps with a mean or a regression estimate, then proceed as if the filled-in values were real. That approach quietly understates your actual uncertainty, because the imputed values get treated as known.
+
+The Bayesian approach (previewed in Unit 6's PyMC discussion) treats missing values as additional unknown parameters to be sampled jointly with everything else, so their uncertainty propagates correctly into the posterior. Whether this matters depends on *why* data is missing:
+
+- **MCAR** (missing completely at random): missingness has nothing to do with any variable's value. The easiest case, deletion doesn't even bias things much here, though it still wastes information.
+- **MAR** (missing at random, conditional on observed variables): missingness depends on things you *did* observe, just not the missing value itself. A Bayesian joint model handles this correctly by construction.
+- **MNAR** (missing not at random): missingness depends on the unobserved value itself (e.g., people with the highest incomes are least likely to report income). This is the hard case, no method fixes it without an explicit model of the missingness mechanism, and that model requires assumptions you generally can't verify from the data alone.
+
+Identifying which of the three you're facing is the actual skill here; the modeling machinery mostly follows once you know that.
+
+## Survival analysis and censoring
+
+Time-to-event data (how long until a machine fails, a patient relapses, a customer churns) has a structural quirk ordinary regression doesn't handle well: at the end of your observation window, some units simply haven't had the event yet. You know their survival time is *at least* however long you observed them, that's **right censoring**, but you don't know the exact time. Treating a censored observation as if the event happened exactly at the censoring time biases everything downward.
+
+A Bayesian time-to-event model handles censoring directly in the likelihood: for censored observations, the likelihood contribution is the *survival function* (probability of surviving past the censoring time) rather than the density at an exact event time. This is a clean example of something Unit 6 flagged as a PyMC strength, censored likelihoods are a built-in pattern, not a special-case hack layered on top of a standard model.

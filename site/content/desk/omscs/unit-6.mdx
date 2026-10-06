@@ -1,0 +1,23 @@
+Homework 5 is the first assignment where PyMC is allowed, and per the syllabus, required. This unit is really about a tooling shift as much as a conceptual one.
+
+## What a PPL buys you
+
+A probabilistic programming language lets you specify a model, priors, likelihood, the DAG connecting them, as code, and hands the sampling problem to a general-purpose inference engine (HMC/NUTS by default in PyMC) instead of you hand-deriving full conditionals or writing your own Metropolis loop. The payoff from Unit 5 is that you now understand *what's happening* when you call `pm.sample()`, it's running the same MCMC machinery, just automated and using a much smarter sampler than plain Metropolis.
+
+This is also why the syllabus withholds PyMC until after the midterm: writing a model in PyMC without understanding what MCMC is actually doing underneath produces code that works until it doesn't, and no ability to diagnose why.
+
+## Reading a model as a graph
+
+Every PyMC model is, structurally, the DAG from Unit 3's Bayes-net discussion: nodes are random variables (priors and the likelihood), edges show which variables the others depend on. Before writing code, sketch the graph, which parameters feed into the likelihood, and which priors feed into which parameters. If you can't draw the DAG, you're not ready to write the model yet; the code is a direct translation of the picture, not the other way around.
+
+## The mechanics that come up constantly
+
+- **Loading data**: getting real data into the shapes PyMC's distributions expect is often more time than the modeling itself.
+- **Missing data**: PyMC can treat missing values as additional unknowns to be sampled, rather than requiring you to drop or impute them beforehand, a genuinely different (and often better) approach than the frequentist default.
+- **Hypothesis testing and prediction**: both fall out of the posterior samples directly, no separate testing framework needed, since you already have the full distribution to query.
+- **Censoring**: when you only observe that a value is above/below some threshold rather than its exact value (common in survival data, previewed properly in Unit 8), PyMC has built-in support for censored likelihoods.
+- **Custom likelihoods**: when your data doesn't fit a built-in distribution, PyMC lets you define a likelihood function directly, useful, but slower to sample and worth reaching for only when a standard distribution genuinely doesn't fit.
+
+## A practical note before Homework 5
+
+Get the environment working on the single simplest example from the TA course notes before opening the actual assignment. PyMC has real installation friction (compiler dependencies, version pinning) that has nothing to do with statistics, better to hit that wall on a toy example than under deadline pressure on a graded homework.

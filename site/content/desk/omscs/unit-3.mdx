@@ -1,0 +1,25 @@
+## Conditioning, twice over
+
+Conditional probability, P(A|B), is "the probability of A given that B happened." The course covers it in two passes because there are two different things worth being careful about: the mechanics of computing it, and the intuition for why conditioning changes your answer at all. Most errors in this unit come from skipping the second part, plugging into the formula without noticing that P(A|B) and P(B|A) are, in general, completely different numbers.
+
+## Bayes' theorem, derived rather than memorized
+
+Starting from the definition of conditional probability, P(A|B) = P(A∩B)/P(B), and doing the same for P(B|A), you can solve both for P(A∩B) and set them equal:
+
+P(A|B) · P(B) = P(B|A) · P(A)
+
+Rearranging gives Bayes' theorem:
+
+P(A|B) = P(B|A) · P(A) / P(B)
+
+The reason to derive this instead of memorizing it is that every piece has a name you'll use for the rest of the semester: P(A) is the **prior**, P(B|A) is the **likelihood**, P(A|B) is the **posterior**, and P(B) is the **evidence** (or marginal likelihood), usually the hardest piece to compute directly, which is exactly the problem MCMC exists to route around starting in Unit 5.
+
+## The examples that make it stick
+
+**Manufacturing/defect-rate problems** are the canonical setup: a part came from one of several machines with different defect rates, you observe a defect, and you want the probability it came from each machine. This is Bayes' theorem with a partition, P(B) expands into a sum over all the machines, weighted by how likely each machine is to produce that part in the first place.
+
+**The two-headed coin problem** is worth doing by hand before looking at any solution: among a set of coins, one is two-headed. You draw a coin at random and flip heads. What's the probability you drew the two-headed coin? The trap is forgetting that a fair coin can also produce heads, so the two-headed coin isn't certain, it's just *more likely* than the prior alone would suggest, and the exact amount "more likely" is the whole computation.
+
+## Bayes nets
+
+A Bayes net (or DAG, directed acyclic graph) is a compact way to represent a joint distribution over several variables by showing which ones directly influence which others, with arrows. The classic teaching example is an alarm system: a burglary or an earthquake can trigger an alarm, and the alarm can prompt a phone call from a neighbor. The graph structure lets you factor a complicated joint probability into a product of small conditional probabilities, one per node given its parents, which is precisely the structure PyMC models will be built from starting in Unit 6. Getting comfortable reading a DAG now (which node depends on which) pays off directly later.

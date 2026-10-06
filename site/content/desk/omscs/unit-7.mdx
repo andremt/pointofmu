@@ -1,0 +1,17 @@
+## Why hierarchical models are the Bayesian answer to "partial pooling"
+
+Say you're estimating a defect rate separately for ten factories. Two extreme approaches: estimate each factory's rate completely independently (**no pooling**, noisy for small factories), or lump all the data together and estimate one shared rate (**full pooling**, ignores real differences between factories). A hierarchical model does neither. Each factory gets its own parameter, but those parameters are themselves drawn from a shared population-level distribution whose parameters are also estimated from the data.
+
+The effect is **partial pooling**: factories with lots of data get estimates close to their own data, while factories with little data get pulled ("shrunk") toward the population average, because the model has less local evidence to override the shared prior. This shrinkage isn't a hack, it falls directly out of applying Bayes' theorem with the right DAG, where the population-level parameters are themselves unknowns with their own (hyper)priors.
+
+This is the single most useful idea in applied Bayesian modeling, and it's why hierarchical structure shows up in the project and case-study material (Unit 10) more than almost anything else in the course.
+
+## Linear models, reframed
+
+Bayesian ANOVA, regression, and factorial designs are the same models you already know from frequentist statistics, the difference is that the coefficients get priors and you get a full posterior distribution over them instead of point estimates and p-values. Concretely: instead of a single regression coefficient, you get a posterior distribution over that coefficient, and instead of an F-test for a factorial design, you compare posterior distributions of group effects (or use one of the model-comparison tools from Unit 9).
+
+Practically, this means the frequentist regression you built in Unit 1 as a baseline should look structurally identical to its Bayesian counterpart here, same design matrix, same linear predictor, with priors bolted onto the coefficients and MCMC replacing the closed-form OLS solution.
+
+## GLMs, multinomial logit, and multilevel models
+
+Generalized linear models extend the linear-model framework to non-normal outcomes (binary, count, categorical) via a link function, logistic regression is the most common example, and multinomial logit extends it to more than two categories. **Multilevel models** are the general name for hierarchical models applied specifically to regression: coefficients that vary by group (factory, classroom, region), with the group-level variation itself modeled and estimated. If Unit 6 was about learning PyMC's syntax, this unit is about learning the small number of model *shapes*, hierarchical, GLM, multilevel, that cover the overwhelming majority of real applied problems, including whatever you choose for the individual project.

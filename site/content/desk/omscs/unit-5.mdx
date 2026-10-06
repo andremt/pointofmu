@@ -1,0 +1,29 @@
+Everything through Unit 4 worked because conjugate priors made the posterior come out in closed form. Real models almost never cooperate that way, the moment you have several parameters, a non-conjugate prior, or a hierarchical structure, the posterior's normalizing constant becomes an integral nobody can solve analytically. This unit is about what to do when that happens, and it's the conceptual core of everything that follows, including the midterm (which covers Units 1-5).
+
+## The reframe: sampling instead of solving
+
+If you can't write down the posterior's formula, you can still learn everything about it by drawing samples from it, a histogram of enough samples approximates the distribution as well as you like. **Markov Chain Monte Carlo (MCMC)** is a family of algorithms for generating those samples by constructing a Markov chain whose stationary distribution *is* the posterior you want, then running it long enough that the samples it produces look like draws from that stationary distribution.
+
+The "Markov chain" part matters: each new sample depends only on the current one, not the whole history, which is what makes these algorithms tractable to run for problems where direct sampling is impossible.
+
+## Laplace's method, as a quick-and-dirty alternative
+
+Before reaching for full MCMC, Laplace's method approximates the posterior with a normal distribution centered at the posterior mode, using a second-order Taylor expansion to estimate its spread. It's fast and often good enough for well-behaved, roughly-symmetric posteriors, but it breaks down for multimodal or heavily skewed posteriors, which is most of the reason MCMC exists rather than everyone just using this instead.
+
+## Metropolis and Metropolis-Hastings
+
+The Metropolis algorithm is the conceptual root of the whole family. At each step:
+
+1. Propose a new candidate parameter value, usually by perturbing the current value with some random jump.
+2. Compute the ratio of the posterior density at the candidate versus the current value (the normalizing constant cancels in this ratio, which is the whole trick, you never need to compute it).
+3. Accept the candidate with probability equal to that ratio (capped at 1); otherwise stay at the current value.
+
+Over many iterations, the chain spends time in each region of parameter space proportional to how much posterior density is there, exactly what you want. Metropolis-Hastings generalizes this to allow asymmetric proposal distributions, correcting the acceptance ratio to account for the asymmetry.
+
+## Gibbs sampling
+
+Gibbs sampling is the natural choice when you have multiple parameters and can derive each one's **full conditional distribution**, its distribution given the current values of every other parameter. Instead of proposing and accepting/rejecting, you cycle through the parameters, sampling each one directly from its conditional given the current values of the rest. When those conditionals have a nice closed form (often true precisely because of the conjugate-family work from Unit 4), Gibbs sampling can be dramatically more efficient than generic Metropolis-Hastings, because every proposal is automatically accepted.
+
+## Hamiltonian Monte Carlo, briefly
+
+HMC uses the *gradient* of the posterior to propose moves that follow the geometry of the distribution rather than wandering randomly, which lets it explore high-dimensional posteriors far more efficiently than plain Metropolis. You won't be implementing HMC by hand, this is what PyMC runs under the hood starting in Unit 6, but knowing that it exists, and why it's the default sampler in modern PPLs, explains why PyMC "just works" on models that would take forever to sample with hand-rolled Metropolis.

@@ -1,0 +1,17 @@
+There's no new theory in this unit, it's worked case studies that pull together priors, MCMC, hierarchical structure, and model checking end to end, the same way the individual project (due December 6th) and the final (covering all ten units) will ask you to.
+
+## What to actually get out of a case study
+
+Don't read a case study for the specific domain content (clinical trials, sports analytics, whatever the example happens to be), read it for the *sequence of decisions*: how the authors moved from a research question to a choice of likelihood, from available background knowledge to a specific prior, from a fitted posterior back to an answer to the original question, and how they checked the model held up before trusting the answer. That sequence is the actual skill this course has been building since Unit 1, and it's identical regardless of domain.
+
+## How this maps onto the project
+
+The project is described in the syllabus as "a Bayesian analysis on a topic of your choice," individual, with full details released after the midterm. Whatever topic you pick, it will need the same skeleton every case study here follows:
+
+1. A dataset and a question worth asking of it.
+2. A likelihood that matches how the data was generated.
+3. A defensible prior, informative if you have real background knowledge, weakly informative otherwise, with the choice justified rather than just asserted.
+4. A fitted posterior, via PyMC.
+5. Model checking (Unit 9) before you trust any conclusion drawn from the posterior.
+
+Reading the case study closest to your own project topic first, purely for structure, is the highest-leverage single thing you can do before writing your own, it's much easier to see where your own analysis needs a hierarchical structure, a censored likelihood, or a specific prior family when you've watched someone else make that decision on a related problem.

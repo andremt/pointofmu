@@ -1,0 +1,15 @@
+## Where this all came from
+
+Bayes' theorem is named for Thomas Bayes, an 18th-century minister whose result was published posthumously in 1763. But "Bayesian statistics" as a live methodology spent most of the 20th century sidelined, frequentist methods (Fisher, Neyman-Pearson) dominated because they didn't require specifying a prior, which critics saw as inserting subjective belief into supposedly objective science. Bayesian methods came back hard starting in the 1990s, once MCMC made it computationally practical to actually compute posteriors for realistic models instead of just toy conjugate cases. That history matters practically: it's why so much of the Bayesian toolkit (Unit 5 onward) is really a story about computation catching up to the theory, not about new theory being discovered.
+
+## The actual disagreement, made concrete
+
+Take ten coin flips, seven heads. A frequentist 95% confidence interval for the true heads-probability is built from a procedure that, if repeated over infinite datasets, covers the true value 95% of the time, but for *this specific interval*, you can't say "there's a 95% chance the true value is in here." That statement is meaningless in frequentist terms, because the true value isn't random.
+
+A Bayesian, starting from a prior on the coin's bias and updating on the same ten flips, produces a posterior distribution, and *can* say "given my prior and this data, there's a 95% probability the true bias is in this range." That's a genuinely different claim, not just different words for the same thing, and it's the reason people confuse credible intervals with confidence intervals constantly: they look similar numerically in simple cases and mean something structurally different.
+
+## Where the choice isn't academic
+
+The FDA's guidance on Bayesian methods in medical device trials is a real case where this distinction has teeth. Bayesian designs let a trial formally incorporate prior information, from earlier trials, related devices, or historical controls, which can shrink the number of new patients needed to reach a conclusion. That's attractive when running a fully powered frequentist trial would be slow or expensive, but it also means the conclusion is only as good as the prior you fed in, which is exactly the "researcher discretion" critics worry about. The FDA's response has been to require pre-registered, justified priors rather than banning them, a practical compromise between the two philosophies' concerns.
+
+Carry that tension into every unit that follows: choosing a prior is not a formality, it's a modeling decision with consequences, and defending that choice is part of doing this well.
