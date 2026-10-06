@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --pom-pink: #ff3d8b;
+  --pom-yellow: #ffd60a;
+  --pom-blue: #2b4bff;
+  --pom-paper: #f7f4ed;
+  --pom-cream: #fbf8f1;
+  --pom-ink: #0e0e10;
+  --pom-ink-soft: #3a3a3f;
+  --pom-rule: rgba(14, 14, 16, 0.12);
+}
+
+body {
+  background: var(--pom-paper);
+  color: var(--pom-ink);
+}
+
+.kicker {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pom-pink);
+}
+
+.headline {
+  font-family: var(--font-instrument-serif), "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 400;
+}
+
+article :where(p) {
+  margin-bottom: 1.25em;
+  line-height: 1.7;
+}
+
+article :where(img) {
+  width: 100%;
+  border-radius: 2px;
+  margin: 1.5em 0;
+}
