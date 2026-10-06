@@ -7,6 +7,7 @@ node_modules/
 *.log
 CLAUDE.md
 *.md
+.claude/
 site/public/videos/*.mp4
 analysis/data/
 analysis/output/
