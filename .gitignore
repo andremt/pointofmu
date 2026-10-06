@@ -8,3 +8,7 @@ node_modules/
 CLAUDE.md
 site/public/videos/*.mp4
 analysis/data/
+analysis/output/
+analysis/.venv/
+__pycache__/
+*.pyc
