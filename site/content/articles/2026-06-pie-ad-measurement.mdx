@@ -1,0 +1,54 @@
+---
+title: "Last-Click Attribution Explains About 19% of Whether Ads Actually Work"
+dek: "The standard approach to measuring ad effectiveness is systematically biased toward false positives. A new paper from Meta Research and Northwestern trains on 2,226 real experiments and builds a better method."
+kicker: "measurement"
+date: "June 11, 2026"
+author: "the μ desk"
+n: 2226
+readTime: "7 min"
+hasVideo: false
+---
+
+The simplest version of how online ads get measured: someone sees your ad, clicks it, then buys something. The platform credits the ad with the sale. This is last-click attribution, and it is how the industry has evaluated campaigns for most of its history.
+
+The problem is that many of those purchases were going to happen regardless. The user had already decided to buy. The ad was nearby when it occurred, which is not the same as the ad causing it. This is the attribution problem, and it has been understood for over a decade. What has been harder to address is the scale problem: the only clean way to test whether an ad actually drove a purchase is a randomized controlled trial, withholding the ad from a random group and comparing outcomes. RCTs work. They are also operationally expensive, and most advertisers run them on a fraction of their campaigns.
+
+A recent paper from Meta Research and Northwestern, called Predicted Incrementality by Experimentation (PIE), puts numbers on exactly how much last-click gets wrong and proposes a way to extend causal measurement to campaigns that never ran an experiment.
+
+The core benchmark is direct: compare both methods against actual RCT results across 2,226 Meta ad experiments.
+
+Last-click attribution, used as a proxy for causal effect, achieves an out-of-sample R² of 0.19 against RCT ground truth. It explains about 19% of the variance in whether a campaign actually moved the needle. PIE, trained on that same RCT data and applied to campaigns that never ran an experiment, achieves an R² of 0.88.
+
+![Predictive accuracy: last-click attribution vs PIE variants](/charts/ep6/1_r2_comparison.png)
+
+PIE's approach is a methodological reframe. Instead of asking "what caused this conversion?", a causal question that requires an experiment to answer cleanly, it asks "given everything I know about this campaign, what would an experiment have found?" That second question is a prediction problem, and prediction is something machine learning handles well.
+
+The process has three steps. First, run RCTs on a sample of campaigns to establish ground truth causal effects. Second, train a model on that sample, mapping campaign features to causal effects. The features include campaign objective, industry vertical, budget, and post-campaign metrics like click-through rates and last-click conversions, not as causal estimates, but as signals that correlate with true incrementality. Third, apply the model to campaigns that never ran an experiment.
+
+![How PIE scales causal measurement from RCTs to all campaigns](/charts/ep6/2_pie_flow.png)
+
+The key methodological move is treating post-campaign metrics as predictive features rather than as the answer. Once RCTs have done the causal work for a subset of campaigns, the rest is pattern recognition.
+
+The paper finds systematic upward bias: last-click overcounts conversions by capturing purchases made up to seven days after an ad click, regardless of whether the ad influenced the decision. The result is a metric with low false negatives but high false positives, rarely misclassifying a genuinely effective campaign as ineffective, but frequently classifying an ineffective campaign as effective.
+
+At the median decision threshold, last-click disagrees with the RCT ground truth on roughly 19% of lower-funnel campaigns. PIE reduces that to 12%. One in five versus roughly one in eight. At real advertising scale, that gap determines which campaigns get continued and which get cut.
+
+![Decision errors: PIE vs last-click attribution at campaign threshold](/charts/ep6/3_error_rates.png)
+
+The authors argue that the costly measurement error in advertising is the false positive: concluding that a campaign works when it does not, then compounding the mistake by increasing spend. In their framing, last-click is structurally prone to that error in a way PIE is not, because it has no mechanism to distinguish between ads that caused purchases and ads that were present when purchases occurred anyway.
+
+The paper is built on Meta data, and the authors note that direct generalization to other platforms, particularly search advertising where user intent is expressed differently through the query, is not guaranteed. Selection dynamics in search create attribution challenges that operate differently from social display.
+
+The authors also argue the core problem extends beyond any single platform: systems using click-based attribution face the same fundamental issue, and the RCT-then-predict approach could in principle be applied anywhere with a sufficient base of past experiments to train on.
+
+The practical constraint is the training data requirement. The paper shows PIE's performance scales reasonably with sample size, though more is better. This points toward a platform-level solution rather than an advertiser-level one: the platform trains a shared model on its aggregate experiment base, and all advertisers on the platform benefit. Every experiment run on the platform improves the model for campaigns with similar features. Experimentation at scale is a shared infrastructure asset.
+
+![PIE model performance by training sample size](/charts/ep6/4_sample_size.png)
+
+Last-click attribution is not without value. For relative performance monitoring, for directional comparisons across campaigns within the same measurement context, an R² of 0.19 is not zero. The limitation is in the question it can answer. If the question is whether an ad caused a purchase, last-click is the wrong measurement instrument.
+
+The authors contend that PIE offers a more accurate answer to that question by anchoring predictions to experimental ground truth. It still requires a platform with a meaningful base of past experiments, which gives large platforms with existing experimentation infrastructure a structural advantage in measurement quality. For advertisers on platforms without that base, the measurement options are genuinely more limited, and the paper does not resolve that problem.
+
+The ground truth is always the experiment. PIE is a method for approximating that ground truth at scale, across campaigns where running a dedicated experiment is not practical.
+
+Paper: Gordon, Moakler, and Zettelmeyer, "Predicted Incrementality by Experimentation (PIE) for Ad Measurement," Meta Research and Northwestern University, March 2026. Dataset: 2,226 Meta ad experiments across e-commerce, retail, and travel verticals.
