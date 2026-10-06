@@ -1,12 +1,11 @@
 # pointofmu analysis code
 
 Reproduction scripts for the data and charts behind each published article,
-rebuilt in October 2026 after the original analysis code was lost (see
-`CLAUDE.md`'s data-loss recovery note; this file itself is local-only and
-gitignored). Each `epN_slug/build_charts.py` is self-contained: data
-fetch, analysis, and chart generation, using the shared style module
-`_style.py` (the palette and figure conventions from `CLAUDE.md`'s chart
-design system).
+rebuilt in October 2026 after the original analysis code was lost to a
+local data-loss incident. Each `epN_slug/build_charts.py` is
+self-contained: data fetch, analysis, and chart generation, using the
+shared style module `_style.py` (the palette and figure conventions from
+the project's chart design system).
 
 ## Setup
 

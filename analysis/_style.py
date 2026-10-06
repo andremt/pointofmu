@@ -1,4 +1,4 @@
-"""Shared chart style for pointofmu.com, per CLAUDE.md's chart design system.
+"""Shared chart style for pointofmu.com, per the project's chart design system.
 
 Every episode's build_charts.py imports this module so all charts share one
 palette, one type scale, and one figure/source-line convention.
