@@ -1,20 +1,18 @@
 """ep5 (shared chart dir): The New Yield Paradigm: Capital's Institutional
 Seal of Approval
 
-Mixed sources:
-  - LIVE, public, no API key: FRED series PCEPI, PCEPILFE, FEDFUNDS,
-    DFII10, via the same unauthenticated fredgraph.csv endpoint used in
-    ep4_labour_share/build_charts.py.
-  - NOT a simple REST endpoint: the Federal Reserve's Distributional
-    Financial Accounts (wealth share by percentile) are served through an
-    interactive dataviz tool (federalreserve.gov/releases/z1/dataviz/dfa/),
-    not a stable CSV URL -- export the "Distribution of wealth" table from
-    that tool manually (choose "Wealth shares" x "Percentile groups") for
-    an exact refresh of the 3_wealth_distribution chart.
-  - PGIM's 2026 Mid-Year Global Market Outlook is a proprietary research
-    note, not a public dataset -- its quotes and recommendations in the
-    article are cited directly from the report, not independently
-    re-derivable.
+FRED series PCEPI, PCEPILFE, FEDFUNDS, DFII10, via the same
+unauthenticated fredgraph.csv endpoint used in
+ep4_labour_share/build_charts.py.
+
+The Fed's Distributional Financial Accounts (wealth share by
+percentile) don't have a stable CSV URL -- they're served through an
+interactive dataviz tool at federalreserve.gov/releases/z1/dataviz/dfa/,
+so export the "Distribution of wealth" table from there manually
+("Wealth shares" x "Percentile groups") for the 3_wealth_distribution
+chart. PGIM's 2026 Mid-Year Global Market Outlook is a proprietary
+research note, not a public dataset -- the quotes and recommendations
+in the article are cited directly from the report.
 """
 
 import sys

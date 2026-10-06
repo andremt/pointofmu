@@ -12,14 +12,12 @@ Web Data Service -- no API key needed.
 
 Table PID for 11-10-0239-01 is 11100239.
 
-Verified: reproduces the article's core finding exactly -- the crossover
-(men 65+ average income exceeds men 25-34) first occurs in 2023 and
-widens in 2024, both matching the article. The exact dollar figures
-differ somewhat from the article's cited numbers ($64,312 vs. $62,800
-for 65+ in 2023, in this live pull), most likely because StatCan revises
-the Canadian Income Survey's published figures periodically and this
-script always pulls the current revision, not the vintage the article
-was written against.
+The crossover (men 65+ average income exceeds men 25-34) lands in 2023
+and widens in 2024 here too, matching the article. The dollar figures
+run a bit higher than the article's cited numbers ($64,312 vs. $62,800
+for 65+ in 2023), most likely because StatCan revises the Canadian
+Income Survey's published figures periodically and this always pulls
+the current revision, not the vintage the article was written against.
 """
 
 import sys

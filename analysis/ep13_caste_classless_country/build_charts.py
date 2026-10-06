@@ -23,11 +23,11 @@ from _style import GREY, INK, PINK, add_source, new_figure, save
 
 OUT_DIR = Path(__file__).resolve().parents[1] / "output" / "ep13"
 
-# TRANSCRIBED from Arcidiacono, Kinsler & Ransom's analysis of SFFA v.
+# transcribed from Arcidiacono, Kinsler & Ransom's analysis of SFFA v.
 # Harvard litigation data, as cited in the article.
 HARVARD_ADMIT_RATES = {"Legacy applicants": 33.6, "Non-legacy applicants": 5.9}
 
-# TRANSCRIBED from Rivera & Tilcsik's resume-audit field experiment
+# transcribed from Rivera & Tilcsik's resume-audit field experiment
 # (316 law firm offices, 14 cities), as cited in the article.
 RESUME_CALLBACK_RATES = {
     "Class-coded 'elite' hobbies\n(sailing, polo, classical music)": 16.25,

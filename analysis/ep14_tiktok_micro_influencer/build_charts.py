@@ -1,31 +1,23 @@
 """ep14: Do Micro-Influencers Actually Engage More?
 
-Live public data, fully reproducible: fetches the three cited samples
-directly from their public CSV mirrors and reruns the log-log fit, the
-cross-platform comparison, and the power-law-vs-lognormal test.
+Pulls the three cited samples from their public CSV mirrors and reruns
+the log-log fit, the cross-platform comparison, and the power-law vs
+log-normal test.
 
-Data:
+Sources:
   - Bright Data TikTok profile sample (n=1,000), via luminati-io/Free-datasets
-    columns used: followers, like_engagement_rate (pre-computed, as a %)
+    columns: followers, like_engagement_rate (pre-computed, as a %)
   - Bright Data Twitter/X post sample (n=1,000), via luminati-io/Free-datasets
-    columns used: followers, likes (engagement rate = likes / followers)
+    columns: followers, likes (engagement rate = likes / followers)
   - niteshkuwarbi/instagram-data-analysis top-1,000 global Instagram mirror (n=996)
-    columns used: Followers, Engagement avg (engagement rate = that / Followers)
+    columns: Followers, Engagement avg (engagement rate = that / Followers)
 
-Verified against the live CSV headers as of October 2026; Bright Data
-mirrors are periodically refreshed, so re-check column names if this
-script starts raising KeyErrors.
-
-Reproduction note: this script's TikTok fit reproduces the article's
-exponent (-0.48 vs. -0.50) and R2 (0.33 vs. 0.34) closely, and the
-Twitter/X fitted values match the article's cited figures almost
-exactly (3.87% / 0.82% at 10k / 100k followers), which validates the
-overall method. The TikTok curve's absolute calibration runs lower
-than the article's cited 2.37%/0.76%, because Bright Data's
-`like_engagement_rate` field's exact formula isn't publicly
-documented and the original computation may have used a different
-combination of the mirror's engagement columns. Treat the exponent
-and R2 as the reproduced finding, not the absolute TikTok percentages.
+Bright Data mirrors get refreshed periodically, so column names can
+drift -- re-check against the live CSV header if this starts raising
+KeyErrors. TikTok's like_engagement_rate field isn't formula-documented
+by Bright Data, so its absolute scale is a best-effort match to the
+article's chart axis rather than a guaranteed exact replication; the
+fitted exponent and R2 are the more load-bearing numbers here.
 """
 
 import sys

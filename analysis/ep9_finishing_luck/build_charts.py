@@ -125,12 +125,9 @@ def chart_reversion_by_decile(df):
 
 if __name__ == "__main__":
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    # Full replication: LEAGUES x range(2014, 2024). Limited here to verify
-    # the pipeline without ~60 sequential rate-limited requests.
-    SEASONS = [2021, 2022, 2023]
-    print(f"[ep9] fetching leagues={LEAGUES[:2]} seasons={SEASONS} "
-          f"(full replication: all 6 leagues, 2014-2023)")
-    df = build_consecutive_pairs(LEAGUES[:2], SEASONS)
+    SEASONS = list(range(2014, 2024))
+    print(f"[ep9] fetching leagues={LEAGUES} seasons={SEASONS[0]}-{SEASONS[-1]}")
+    df = build_consecutive_pairs(LEAGUES, SEASONS)
     if len(df):
         df, r_xg, r_fin = analyze(df)
         chart_reversion_by_decile(df)

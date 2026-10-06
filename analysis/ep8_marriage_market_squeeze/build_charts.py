@@ -1,20 +1,19 @@
 """ep8: The College Gender Gap Reshaped the Marriage Market
 
-Mixed sources:
-  - LIVE, public: BLS Current Population Survey, median usual weekly
-    earnings by educational attainment, men 25+, via the BLS public API
-    (https://api.bls.gov/publicAPI/v2/timeseries/data/{series_id} --
-    confirmed working with no key, rate-limited to 25 queries/day; get a
-    free key at bls.gov/developers/api_signature_v2.html for 500/day and
-    a 20-year lookback instead of 10). Exact series IDs: use BLS's "LE"
-    (usual weekly earnings) series ID builder at bls.gov/cps/earnings.htm
-    to confirm the current codes for "bachelor's degree and higher" and
-    "high school graduates, no college," men, 25 years and over.
-  - NOT public microdata: the marriage-rate-by-education figures (CPS,
-    birth cohorts 1930-1980) and the cross-education-marriage share come
-    from Chambers, Goldman & Winkelmann's NBER working paper (No. 35179),
-    which reports them as figures/tables rather than a downloadable
-    series. Transcribed below from the article's own cited numbers.
+BLS Current Population Survey, median usual weekly earnings by
+educational attainment, men 25+, via the BLS public API
+(https://api.bls.gov/publicAPI/v2/timeseries/data/{series_id}, no key
+needed but rate-limited to 25 queries/day -- a free key at
+bls.gov/developers/api_signature_v2.html gets 500/day and a 20-year
+lookback instead of 10). Use BLS's "LE" series ID builder at
+bls.gov/cps/earnings.htm to confirm current codes for "bachelor's
+degree and higher" and "high school graduates, no college," men 25+.
+
+The marriage-rate-by-education figures (CPS, birth cohorts 1930-1980)
+and the cross-education-marriage share aren't public microdata -- they
+come from Chambers, Goldman & Winkelmann's NBER working paper (No.
+35179), which reports them as figures/tables, not a downloadable
+series. Transcribed below from the article's own cited numbers.
 """
 
 import sys
@@ -27,7 +26,7 @@ from _style import BLUE, GREY, INK, PINK, add_source, new_figure, save
 
 OUT_DIR = Path(__file__).resolve().parents[1] / "output" / "ep8"
 
-# TRANSCRIBED from the article's text, which cites the paper's own figures
+# transcribed from the article's text, which cites the paper's own figures
 # directly (NBER WP 35179, CPS birth cohorts 1930-1980). No public CSV of
 # the underlying marriage-rate-by-cohort series exists.
 MARRIAGE_RATE_BY_EDUCATION = {
@@ -59,20 +58,15 @@ def chart_marriage_divergence():
 
 def chart_earnings_premium():
     """The one chart in this article backed by live, public microdata."""
-    # Verify exact series IDs at https://data.bls.gov/cgi-bin/surveymost before
-    # relying on this in production; these are illustrative placeholders for
-    # "men 25+, usual weekly earnings" cut by education.
-    # CAUTION: verified only the "bachelors" id below against the article's
-    # cited figure (~$1,768/wk here vs. $88k/yr ~ $1,692/wk cited -- close,
-    # consistent with the 2 years of wage growth since the article's data
-    # vintage). The "high_school" id returned an implausible $456/wk on
-    # testing (actual BLS HS-only earnings run ~$900-1000/wk), meaning this
-    # guessed series ID is wrong -- look up the correct one at
-    # https://data.bls.gov/cgi-bin/surveymost (series LEU02, men 25+, HS
-    # graduates no college) before relying on this chart.
+    # Series IDs: look these up at https://data.bls.gov/cgi-bin/surveymost
+    # (series LEU02, men 25+, by education) to confirm current codes.
+    # "bachelors" below checks out against the article's cited $88k/yr
+    # (~$1,692/wk) figure. "high_school" returns an implausible $456/wk --
+    # actual BLS HS-only earnings run ~$900-1000/wk -- so that id is wrong
+    # and needs replacing before this chart is trustworthy.
     series_ids = {
-        "high_school": "LEU0252916500",   # UNVERIFIED, likely wrong -- see caution above
-        "bachelors": "LEU0252918500",      # verified against article's figure
+        "high_school": "LEU0252916500",   # wrong id, needs replacing -- see note above
+        "bachelors": "LEU0252918500",
     }
     results = {}
     for label, sid in series_ids.items():

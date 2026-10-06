@@ -6,6 +6,7 @@ node_modules/
 .DS_Store
 *.log
 CLAUDE.md
+*.md
 site/public/videos/*.mp4
 analysis/data/
 analysis/output/

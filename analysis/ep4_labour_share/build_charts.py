@@ -1,21 +1,16 @@
 """ep4: Labour's losing share: 70 years of structural drift
 
-Mixed sources:
-  - LIVE, public, no API key needed: FRED series LABSHPUSA156NRUG (US
-    labour share) and real GDP growth, via FRED's unauthenticated
-    fredgraph.csv endpoint.
-  - NOT independently re-derivable from a single public download: the
-    net-return-on-capital series is calibrated from Piketty & Zucman
-    (2014) and the World Inequality Lab's 2025 working paper update
-    (WIL Working Paper 2025-21), which publish their series as figures
-    /tables in the paper rather than a clean machine-readable API. The
-    OECD STAN automation comparisons and IFR World Robotics Report 2024
-    are likewise table/report data, not a public API.
+FRED series LABSHPUSA156NRUG (US labour share) and real GDP growth,
+pulled from FRED's unauthenticated fredgraph.csv endpoint -- no key
+needed.
 
-This script pulls the live FRED series for real, computes the same r-g
-correlation structure the article describes, and clearly marks the
-r/tax-rate/robot-density inputs it has to take as manually transcribed
-from the cited reports, since no public API serves them directly.
+The net-return-on-capital series doesn't have a clean machine-readable
+source: it's calibrated from Piketty & Zucman (2014) and the World
+Inequality Lab's 2025 working paper update (WIL WP 2025-21), both of
+which publish as figures/tables rather than an API, so that part is
+transcribed by decade below. OECD STAN automation comparisons and the
+IFR World Robotics Report 2024 are the same story -- table data, not
+an API.
 """
 
 import sys
@@ -81,7 +76,7 @@ def rg_gap_series(annual_labor_share):
     g = gdp.groupby("year").value.mean()
     g = g.rolling(5, center=True, min_periods=1).mean()  # 5yr centered MA, per article
 
-    # TRANSCRIBED from Piketty & Zucman (2014) Table 2 + WIL WP 2025-21
+    # transcribed from Piketty & Zucman (2014) Table 2 + WIL WP 2025-21
     # Figure 3 (net rate of return on private capital, advanced economies,
     # decade averages). Not a public CSV -- digitized from the published
     # figures as the best available substitute for the paper's own series.

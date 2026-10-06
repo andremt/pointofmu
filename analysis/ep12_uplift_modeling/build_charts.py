@@ -1,30 +1,23 @@
 """ep12: Does Uplift Modeling Actually Beat Guessing Who'll Buy?
 
-Live public data, fully reproducible: the Criteo Research Uplift Modeling
-Dataset (Diemert, Betlei, Renaudin & Amini, "A Large Scale Benchmark for
-Uplift Modeling," AdKDD 2018). The dataset's original host (go.criteo.net)
-returns 404 as of this recovery; Criteo's own team re-published the exact
-same file on Hugging Face (criteo/criteo-uplift), which is what this script
-pulls from.
+Criteo Research Uplift Modeling Dataset (Diemert, Betlei, Renaudin &
+Amini, "A Large Scale Benchmark for Uplift Modeling," AdKDD 2018).
+go.criteo.net stops serving the file from time to time; Criteo's team
+also mirrors it on Hugging Face (criteo/criteo-uplift), which is what
+this pulls from.
 
 n = 13,979,592 (post dropna), 12 anonymized features (f0-f11), a binary
-`treatment` indicator, and `visit` / `conversion` outcomes.
+treatment indicator, visit/conversion outcomes.
 
-Reproduces: average treatment effect, a two-model uplift score vs. a
-single response-propensity baseline, their Qini coefficients, the
-percentile score distribution, and the decile uplift breakdown.
+Builds: average treatment effect, a two-model uplift score vs. a plain
+response-propensity baseline, their Qini coefficients, the percentile
+score distribution, and the decile uplift breakdown.
 
-Verified: the average treatment effect reproduces the article's cited
-figures exactly (control 0.194%, treatment 0.309%, 0.115pp gap, 95% CI
-[0.108, 0.122]). The Qini comparison reproduces the method faithfully
-(two-model uplift vs. a response-only baseline, scored on a held-out
-third) but the specific numeric result can flip direction depending on
-regularization and solver choices the article doesn't specify -- this
-plain LogisticRegression run finds the two-model score slightly ahead
-of the baseline (r=0.83 between scores), whereas the article reports
-the two-model score coming in behind it (r=0.51). Both are plausible
-outcomes of "the standard two-model approach" on this dataset; match
-the article's exact hyperparameters if an exact reproduction matters.
+Qini direction is sensitive to regularization/solver choices the
+article doesn't specify -- a plain LogisticRegression run here puts the
+two-model score slightly ahead of the baseline (r=0.83 between scores)
+rather than behind it like the article (r=0.51). Match exact
+hyperparameters if that specific flip matters.
 """
 
 import gzip
@@ -42,8 +35,7 @@ from _style import BLUE, GREY, INK, PINK, add_source, new_figure, save
 
 DATA_DIR = Path(__file__).resolve().parents[1] / "data" / "ep12"
 DATA_FILE = DATA_DIR / "criteo-research-uplift-v2.1.csv.gz"
-# Primary host is dead (go.criteo.net 404s as of Oct 2026); Criteo's own
-# team re-published the identical file here.
+# go.criteo.net is unreliable; Criteo's team mirrors the identical file here.
 DATA_URL = "https://huggingface.co/datasets/criteo/criteo-uplift/resolve/main/criteo-research-uplift-v2.1.csv.gz"
 OUT_DIR = Path(__file__).resolve().parents[1] / "output" / "ep12"
 
@@ -53,7 +45,7 @@ FEATURES = [f"f{i}" for i in range(12)]
 def fetch():
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     if not DATA_FILE.exists():
-        print("[ep12] downloading ~311MB from Hugging Face (Criteo's dead link's live mirror)...")
+        print("[ep12] downloading ~311MB from Hugging Face...")
         resp = requests.get(DATA_URL, stream=True, timeout=120)
         resp.raise_for_status()
         with open(DATA_FILE, "wb") as fh:

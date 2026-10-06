@@ -1,19 +1,14 @@
 """ep10: The World Cup Matches With the Most Money Had the Worst Odds
 
-Live public APIs: Polymarket's Gamma (event/market metadata, resolved
-outcomes, volume), CLOB (pre-kickoff price history), and Data (trade-level
-records, for unique wallet counts).
+Polymarket's Gamma (event/market metadata, resolved outcomes, volume),
+CLOB (pre-kickoff price history), and Data (trade-level records, for
+unique wallet counts) APIs.
 
-Known limitation, confirmed while building this reproduction: Polymarket's
-CLOB price-history endpoint only retains a rolling window of recent ticks
-(the article itself notes "~30 days"). As of this recovery (October 2026,
-three months after the World Cup final), GET /prices-history for the
-original 2026 World Cup matches returns an empty history -- confirmed
-directly against a live World Cup market token while writing this script.
-That's not a bug here; it's the same API limitation the article called out.
-This script is written to run correctly against any event whose CLOB price
-history is still within the retention window -- rerun it against a current
-tournament to get a live version of the same analysis.
+Polymarket's CLOB price-history endpoint only retains a rolling window
+of recent ticks (the article notes ~30 days), so GET /prices-history on
+an old match's token comes back empty once it ages out -- that's the
+retention limit the article itself called out, not a bug here. Point
+this at any event still inside the retention window for a live run.
 
 Endpoints:
   Gamma events:   https://gamma-api.polymarket.com/events/slug/{slug}
@@ -51,9 +46,8 @@ def find_event_markets(event_slug):
 def get_pre_kickoff_price(clob_token_id, lookback_minutes=30):
     """Last traded price in the window before a market's known close time.
 
-    Returns None if CLOB has no retained history for this token (expected
-    for any 2026 World Cup market by the time this runs, per the retention
-    note above).
+    Returns None if CLOB has no retained history left for this token --
+    see the retention note up top.
     """
     resp = requests.get(
         f"{CLOB}/prices-history",
@@ -133,10 +127,9 @@ def build_match_dataset(event_slugs):
 def analyze_and_chart(df):
     df = df.dropna(subset=["pre_kickoff_price", "resolved_yes", "volume"]).copy()
     if df.empty:
-        print("[ep10] No rows have retained CLOB price history -- this is "
-              "expected for the original 2026 World Cup matches by now. "
-              "Rerun against a currently-open or recently-closed event to "
-              "see the live version of this analysis.")
+        print("[ep10] No rows have retained CLOB price history -- normal "
+              "once a market ages past the retention window. Rerun against "
+              "a currently-open or recently-closed event instead.")
         return
 
     df["brier"] = brier_score(df.pre_kickoff_price, df.resolved_yes)
@@ -177,13 +170,8 @@ if __name__ == "__main__":
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-    # Verified working example (confirmed while building this script: 48
-    # markets, real volume/wallet data pulled live). Its CLOB price history
-    # has also already rolled off by now, same as the original World Cup
-    # matches, so analyze_and_chart() will report the "no retained history"
-    # message below rather than crash -- that's the correct, honest
-    # behavior, not a bug. Swap in a currently-open event's slug to see the
-    # full reliability/Brier charts actually populate.
+    # Price history for this one has also rolled off by now -- swap in a
+    # currently-open event's slug to get the reliability/Brier charts too.
     EVENT_SLUGS = ["world-cup-nation-to-reach-final"]
 
     df = build_match_dataset(EVENT_SLUGS)

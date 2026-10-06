@@ -133,11 +133,8 @@ def chart_spillover_regression(df):
 
 if __name__ == "__main__":
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    # Full replication: range(2001, 2025). Limited here to a handful of
-    # seasons to verify the pipeline without hammering Basketball-Reference
-    # or taking several minutes of rate-limited requests.
-    YEARS = [2001, 2010, 2015, 2020, 2024]
-    print(f"[ep7] fetching seasons: {YEARS} (full replication: 2001-2024, 24 seasons)")
+    YEARS = list(range(2001, 2025))
+    print(f"[ep7] fetching seasons {YEARS[0]}-{YEARS[-1]} ({len(YEARS)} seasons)")
     df = build_team_seasons(YEARS)
     df = compute_scores(df)
     print(f"[ep7] n={len(df)} team-seasons across {df.year.nunique()} seasons")

@@ -1,7 +1,7 @@
-"""Shared chart style for pointofmu.com, per the project's chart design system.
+"""Shared chart style for pointofmu.com.
 
-Every episode's build_charts.py imports this module so all charts share one
-palette, one type scale, and one figure/source-line convention.
+Every episode's build_charts.py imports this so charts share one palette,
+one type scale, one figure/source-line convention.
 """
 
 import matplotlib.pyplot as plt

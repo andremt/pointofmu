@@ -18,7 +18,7 @@ from _style import BLUE, GREY, INK, PINK, add_source, new_figure, save
 
 OUT_DIR = Path(__file__).resolve().parents[1] / "output" / "ep6"
 
-# TRANSCRIBED from Gordon, Moakler & Zettelmeyer (2026), as cited in the article.
+# transcribed from Gordon, Moakler & Zettelmeyer (2026), as cited in the article.
 R2_COMPARISON = {"Last-click": 0.19, "PIE": 0.88}
 ERROR_RATES = {"Last-click": 19, "PIE": 12}  # % disagreement with RCT ground truth
 N_EXPERIMENTS = 2226
